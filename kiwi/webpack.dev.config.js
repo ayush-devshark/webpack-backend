@@ -1,5 +1,5 @@
 const path = require('path');
-const { CleanWebpackPlugin } = require('clean-webpack-plugin');
+const {CleanWebpackPlugin} = require('clean-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 module.exports = {
@@ -7,7 +7,7 @@ module.exports = {
     output: {
         filename: '[name].bundle.js',
         path: path.resolve(__dirname, './dist'),
-        publicPath: ''
+        publicPath: '',
     },
     mode: 'development',
     devServer: {
@@ -17,8 +17,8 @@ module.exports = {
         },
         devMiddleware: {
             index: 'kiwi.html',
-            writeToDisk: true
-        }
+            writeToDisk: true,
+        },
     },
     module: {
         rules: [
@@ -27,19 +27,17 @@ module.exports = {
                 type: 'asset',
                 parser: {
                     dataUrlCondition: {
-                        maxSize: 3 * 1024
-                    }
-                }
+                        maxSize: 3 * 1024,
+                    },
+                },
             },
             {
                 test: /\.txt/,
-                type: 'asset/source'
+                type: 'asset/source',
             },
             {
                 test: /\.scss$/,
-                use: [
-                    'style-loader', 'css-loader', 'sass-loader'
-                ]
+                use: ['style-loader', 'css-loader', 'sass-loader'],
             },
             {
                 test: /\.js$/,
@@ -47,17 +45,15 @@ module.exports = {
                 use: {
                     loader: 'babel-loader',
                     options: {
-                        presets: [ '@babel/env' ],
-                    }
-                }
+                        presets: ['@babel/env'],
+                    },
+                },
             },
             {
                 test: /\.hbs$/,
-                use: [
-                    'handlebars-loader'
-                ]
-            }
-        ]
+                use: ['handlebars-loader'],
+            },
+        ],
     },
     plugins: [
         new CleanWebpackPlugin(),
@@ -65,7 +61,15 @@ module.exports = {
             filename: 'kiwi.html',
             title: 'Kiwi',
             description: 'Kiwi',
-            template: 'src/page-template.hbs'
-        })
-    ]
+            template: 'src/page-template.hbs',
+        }),
+        new ModuleFederationPlugin({
+            name: 'KiwiApp',
+            filename: 'remoteEntry.js',
+            remotes: {
+                HelloWorldApp:
+                    'HelloWorldApp@http://localhost:9001/remoteEntry.js',
+            },
+        }),
+    ],
 };
