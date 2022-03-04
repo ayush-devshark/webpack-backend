@@ -1,6 +1,6 @@
 const path = require('path');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
-const { CleanWebpackPlugin } = require('clean-webpack-plugin');
+const {CleanWebpackPlugin} = require('clean-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 module.exports = {
@@ -8,35 +8,29 @@ module.exports = {
     output: {
         filename: 'bundle.[contenthash].js',
         path: path.resolve(__dirname, './dist'),
-        publicPath: ''
+        publicPath: '/static/',
     },
     mode: 'production',
     optimization: {
         splitChunks: {
             chunks: 'all',
             minSize: 10000,
-            automaticNameDelimiter: '_'
-        }
+            automaticNameDelimiter: '_',
+        },
     },
     module: {
         rules: [
             {
                 test: /\.(png|jpg)$/,
-                use: [
-                    'file-loader'
-                ]
+                use: ['file-loader'],
             },
             {
                 test: /\.css$/,
-                use: [
-                    MiniCssExtractPlugin.loader, 'css-loader'
-                ]
+                use: [MiniCssExtractPlugin.loader, 'css-loader'],
             },
             {
                 test: /\.scss$/,
-                use: [
-                    MiniCssExtractPlugin.loader, 'css-loader', 'sass-loader'
-                ]
+                use: [MiniCssExtractPlugin.loader, 'css-loader', 'sass-loader'],
             },
             {
                 test: /\.js$/,
@@ -44,28 +38,26 @@ module.exports = {
                 use: {
                     loader: 'babel-loader',
                     options: {
-                        presets: [ '@babel/env' ],
-                        plugins: [ '@babel/plugin-proposal-class-properties' ]
-                    }
-                }
+                        presets: ['@babel/env'],
+                        plugins: ['@babel/plugin-proposal-class-properties'],
+                    },
+                },
             },
             {
                 test: /\.hbs$/,
-                use: [
-                    'handlebars-loader'
-                ]
-            }
-        ]
+                use: ['handlebars-loader'],
+            },
+        ],
     },
     plugins: [
         new MiniCssExtractPlugin({
-            filename: 'styles.[contenthash].css'
+            filename: 'styles.[contenthash].css',
         }),
         new CleanWebpackPlugin(),
         new HtmlWebpackPlugin({
             title: 'Hello world',
             description: 'Hello world',
-            template: 'src/page-template.hbs'
-        })
-    ]
+            template: 'src/page-template.hbs',
+        }),
+    ],
 };
